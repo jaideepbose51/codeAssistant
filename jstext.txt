@@ -1,0 +1,60 @@
+import OpenAI from "openai";
+import dotenv from "dotenv";
+import userMiddleware from "../middlleware/index.js";
+import { Router } from "express";
+
+dotenv.config();
+
+const router = Router();
+const userConversations = new Map(); // Store conversation history for each user
+
+router.post("/chat", userMiddleware, async (req, res) => {
+    let code = req.body.prompt;
+    const userId = req.user.id; // Assuming user id is available in req.user.id
+
+    if (code === '/endchat') {
+        userConversations.delete(userId);
+        return res.json({ message: 'Chat ended.' });
+    }
+
+    const conversation = userConversations.get(userId) || [];
+    conversation.push({
+        role: "user",
+        content: code
+    });
+
+    try {
+        const response = await fetchOpenAI(conversation);
+        const parsedResponse = JSON.parse(response);
+        conversation.push({
+            role: "assistant",
+            content: parsedResponse
+        });
+        userConversations.set(userId, conversation);
+        res.json(parsedResponse);
+    } catch (err) {
+        res.status(500).json({ error: err.toString() });
+    }
+});
+
+const fetchOpenAI = async (messages) => {
+    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+    const openai = new OpenAI({
+        apiKey: OPENAI_API_KEY,
+    });
+
+    try {
+        const response = await openai.chat.completions.create({
+            model: "gpt-3.5-turbo",
+            messages: messages
+        });
+
+        return response.choices[0].message.content;
+
+    } catch (error) {
+        console.error("Error fetching data from OpenAI API:", error);
+        throw new Error("Error fetching data from OpenAI API.");
+    }
+}
+
+export default router;
