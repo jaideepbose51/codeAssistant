@@ -7,7 +7,8 @@ function userMiddleware(req, res, next) {
     const decodedValue = jwt.verify(token, JWT_SECRET);
 
     try{
-        if (decodedValue.email) {    
+        if (decodedValue.email) { 
+            console.log("Jaideep2"); 
             next();
         } else {
             res.status(403).json({

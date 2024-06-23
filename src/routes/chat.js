@@ -1,32 +1,30 @@
 import OpenAI from "openai";
 import dotenv from "dotenv";
-import userMiddleware from "../middlleware/index.js";
-import { Router } from "express";
-
 dotenv.config();
+
+import userMiddleware from "../middlleware/index.js";
+import express, { Router } from "express";
+
+
 
 
 const userConversations = new Map(); // Store conversation history for each user
-
+const app=express();
+app.use(express.json());
 
 const router = Router();
 router.post("/create",userMiddleware,async(req,res)=>{
     let code  = req.body.prompt;
-    console.log(code
-    );
-
-    if (code === '/endchat') {
-        userConversations.delete(userId);
-        return res.json({ message: 'Chat ended.' });
-    }
+    console.log(code);
 
     
 
     const prompt = [
-        "Generate an output for the prompt if it is related to codeing if it is not related to codeing i only respond to codeing prompt",
+        "Generate a program for the prompt ",
         `[prompt : ${code}]`,
-        "Use previous response if needed",
-        `[previous response :${userConversations}]`
+        "and return output in a json format"
+        // "Use previous response if needed",
+        // `[previous response :${userConversations}]`
     ].join(" ");
     const messages = [
         {
@@ -37,13 +35,9 @@ router.post("/create",userMiddleware,async(req,res)=>{
 
     try {
         const response = await fetchOpenAI(messages);
-        const parsedResponse = JSON.parse(response);
-        const conversation = userConversations.get(userId) || [];
-    conversation.push({
-        role: "user",
-        content: parsedResponse
-    });
-        res.json(parsedResponse);
+        // const parsedResponse = JSON.parse(response);
+        console.log(response);
+        res.send(response);
     } catch (err) {
         res.status(500).json({ error: err.toString() });
     }
