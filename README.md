@@ -32,15 +32,17 @@ The project uses the following npm packages:
 Create a .env file in the root directory and add the following variables:
 ```sh
 PORT=3000
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-OPENAI_API_KEY=your_openai_api_key
-SESSION_SECRET=your_session_secret
+MONGODB_URI="mongo connection string"
+JWT_SECRET="*Your jwt token"
+SALT_ROUNDS=13
+SESSION_SECRET="Your Secret"
+OPENAI_API_KEY="Your api key"
+```
 
 4. **Start the development server:
 
 To start the server, run:
-sh
+``` sh
 npm run dev
 
 
