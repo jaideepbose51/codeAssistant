@@ -8,24 +8,29 @@ import express, { Router } from "express";
 
 
 
-const userConversations = new Map(); // Store conversation history for each user
 const app=express();
 app.use(express.json());
+
+let previousResponse = new Array();
 
 const router = Router();
 router.post("/create",userMiddleware,async(req,res)=>{
     let code  = req.body.prompt;
     console.log(code);
 
-    
+    if (code.toLowerCase() == "end"){
+        previousResponse = [];
+        res.status(200);
+    }
+
 
     const prompt = [
-        "Generate a program for the prompt ",
+        "Generate a program for the coding prompt ",
         `[prompt : ${code}]`,
-        "and return output in a json format"
-        // "Use previous response if needed",
-        // `[previous response :${userConversations}]`
+        "Use previous response if needed",
+        `[previous response :${previousResponse}]`
     ].join(" ");
+    
     const messages = [
         {
             role: "user",
@@ -37,6 +42,7 @@ router.post("/create",userMiddleware,async(req,res)=>{
         const response = await fetchOpenAI(messages);
         // const parsedResponse = JSON.parse(response);
         console.log(response);
+        previousResponse.push(response);
         res.send(response);
     } catch (err) {
         res.status(500).json({ error: err.toString() });
