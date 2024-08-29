@@ -14,15 +14,14 @@ app.use(express.json());
 let previousResponse = new Array();
 
 const router = Router();
-router.post("/create",userMiddleware,async(req,res)=>{
-    let code  = req.body.prompt;
+router.post("/create", userMiddleware, async (req, res) => {
+    let code = req.body.prompt;
     console.log(code);
 
-    if (code.toLowerCase() == "end"){
+    if (code.toLowerCase() == "end") {
         previousResponse = [];
         res.status(200);
     }
-
 
     const prompt = [
         "Generate a program for the coding prompt ",
@@ -30,8 +29,13 @@ router.post("/create",userMiddleware,async(req,res)=>{
         "Use previous response if needed",
         `[previous response :${previousResponse}]`
     ].join(" ");
-    
+
     const messages = [
+        {
+            role: "system",
+            content: "You are a helpful assistant."
+        },
+        ...previousResponse,
         {
             role: "user",
             content: prompt
@@ -40,13 +44,17 @@ router.post("/create",userMiddleware,async(req,res)=>{
 
     try {
         const response = await fetchOpenAI(messages);
-        // const parsedResponse = JSON.parse(response);
         console.log(response);
-        previousResponse.push(response);
+        previousResponse.push({ role: 'assistant', content: response });
         res.send(response);
     } catch (err) {
         res.status(500).json({ error: err.toString() });
     }
+});
+
+router.post("/clearHistory", userMiddleware, async (req, res) => {
+    previousResponse = [];
+    res.status(200).json({ message: "Chat history cleared." });
 });
 
 const fetchOpenAI = async (messages) => {
