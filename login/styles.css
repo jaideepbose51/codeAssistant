@@ -1,0 +1,138 @@
+@import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@100;300;400;500;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Alegreya Sans", sans-serif;
+}
+
+body {
+  background: #343541;
+  color: #dcdcdc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-container {
+  background: #40414F;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  max-width: 500px; /* Increased form width */
+  width: 100%;
+  animation: slideUp 0.8s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.auth-box h1 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #fff;
+  animation: pulse 0.7s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  font-size: 18px;
+  margin-bottom: 8px;
+  display: block;
+  color: #dcdcdc;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #343541;
+  color: #fff;
+  font-size: 16px;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.input-group input:focus {
+  box-shadow: 0 0 8px rgba(16, 163, 127, 0.5);
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 15px;
+  border-radius: 8px;
+  background: #10a37f;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  transition: background 0.3s ease-in-out, transform 0.2s ease;
+}
+
+.auth-btn:hover {
+  background: #0e8c6e;
+  transform: translateY(-3px);
+}
+
+.auth-btn:active {
+  transform: translateY(0);
+}
+
+.switch-form {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+.switch-form a {
+  color: #10a37f;
+  text-decoration: none;
+}
+
+.switch-form a:hover {
+  text-decoration: underline;
+}
